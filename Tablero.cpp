@@ -68,10 +68,10 @@ Tablero::Tablero(){
     tablero[7][6] = cb;
     tablero[7][7] = tb;
 
-    /*xBlanco = 4;
+    xBlanco = 4;
     yBlanco = 7;
     xNegro = 4;
-    yNegro = 0;*/
+    yNegro = 0;
 }
 
 Tablero::~Tablero()
@@ -872,6 +872,173 @@ bool Tablero::validarMovimiento(string mov, int jugador)
 // revisar bien caballos y probar bien los peones
 
 bool Tablero::estoyEnJaque(int jugadorA,int opci)
+{
+    bool devolver = false;
+    for(int i=0;i<8;i++)
+    {
+        for(int j=0;j<8;j++)
+        {
+            if(tablero[i][j].getJugador()!=jugadorA && tablero[i][j].getJugador()!=0)
+            {
+                string movim="       ";
+
+                if(j == 0)
+                    movim[0] = 'a';
+                else if(j == 1)
+                    movim[0] = 'b';
+                else if(j == 2)
+                    movim[0] = 'c';
+                else if(j == 3)
+                    movim[0] = 'd';
+                else if(j == 4)
+                    movim[0] = 'e';
+                else if(j == 5)
+                    movim[0] = 'f';
+                else if(j == 6)
+                    movim[0] = 'g';
+                else
+                    movim[0] = 'h';
+
+                if(i == 0)
+                    movim[1] = '0';
+                else if(i == 1)
+                    movim[1] = '1';
+                else if(i == 2)
+                    movim[1] = '2';
+                else if(i == 3)
+                    movim[1] = '3';
+                else if(i == 4)
+                    movim[1] = '4';
+                else if(i == 5)
+                    movim[1] = '5';
+                else if(i == 6)
+                    movim[1] = '6';
+                else
+                    movim[1] = '7';
+
+                movim[2] = ' ';
+                movim[3] = 'a';
+                movim[4] = ' ';
+
+                if(jugadorA==2)
+                {
+                    int xrey = getXnegro();
+
+                    if(xrey == 0)
+                        movim[5] = 'a';
+                    else if(xrey == 1)
+                        movim[5] = 'b';
+                    else if(xrey == 2)
+                        movim[5] = 'c';
+                    else if(xrey == 3)
+                        movim[5] = 'd';
+                    else if(xrey == 4)
+                        movim[5] = 'e';
+                    else if(xrey == 5)
+                        movim[5] = 'f';
+                    else if(xrey == 6)
+                        movim[5] = 'g';
+                    else
+                        movim[5] = 'h';
+
+                    int yrey = getYnegro();
+
+                    if(yrey == 0)
+                        movim[6] = '0';
+                    else if(yrey == 1)
+                        movim[6] = '1';
+                    else if(yrey == 2)
+                        movim[6] = '2';
+                    else if(yrey == 3)
+                        movim[6] = '3';
+                    else if(yrey == 4)
+                        movim[6] = '4';
+                    else if(yrey == 5)
+                        movim[6] = '5';
+                    else if(yrey == 6)
+                        movim[6] = '6';
+                    else
+                        movim[5] = '7';
+                }
+                else
+                {
+                    int xrey = getXblanco();
+
+                    if(xrey == 0)
+                        movim[5] = 'a';
+                    else if(xrey == 1)
+                        movim[5] = 'b';
+                    else if(xrey == 2)
+                        movim[5] = 'c';
+                    else if(xrey == 3)
+                        movim[5] = 'd';
+                    else if(xrey == 4)
+                        movim[5] = 'e';
+                    else if(xrey == 5)
+                        movim[5] = 'f';
+                    else if(xrey == 6)
+                        movim[5] = 'g';
+                    else
+                        movim[5] = 'h';
+
+                    int yrey = getYblanco();
+
+                    if(yrey == 0)
+                        movim[6] = '0';
+                    else if(yrey == 1)
+                        movim[6] = '1';
+                    else if(yrey == 2)
+                        movim[6] = '2';
+                    else if(yrey == 3)
+                        movim[6] = '3';
+                    else if(yrey == 4)
+                        movim[6] = '4';
+                    else if(yrey == 5)
+                        movim[6] = '5';
+                    else if(yrey == 6)
+                        movim[6] = '6';
+                    else
+                        movim[6] = '7';
+                }
+                //cout << movim << endl;
+
+                cout.setstate(ios_base::failbit);
+                if(jugadorA==1)
+                {
+
+                    if(validarMovimiento(movim,2))
+                    {
+                        cout.clear();
+                        cout << "La ficha " << tablero[i][j].getNombre();
+                        if(opci==0)
+                            cout << " te tiene en jaque." << endl;
+                        else
+                            cout << " te tendria en jaque si haces este movimiento" << endl;
+                        devolver = true;
+                    }
+                }
+                else
+                {
+                    if(validarMovimiento(movim,1))
+                    {
+                        cout.clear();
+                        cout << "La ficha " << tablero[i][j].getNombre();
+                        if(opci==0)
+                            cout << " te tiene en jaque." << endl;
+                        else
+                            cout << " te tendria en jaque si haces este movimiento" << endl;
+                        devolver = true;
+                    }
+                }
+                cout.clear();
+
+            }
+        }
+    }
+    return devolver;
+}
+
+bool Tablero::estoyEnJaqueMate(int jugadorA,int opci)
 {
     bool devolver = false;
     for(int i=0;i<8;i++)

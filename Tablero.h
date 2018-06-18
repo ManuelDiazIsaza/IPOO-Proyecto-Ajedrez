@@ -13,10 +13,10 @@ using namespace std;
 class Tablero{
 private:
     Fichas tablero[8][8];
-    int xBlanco = 4;
-    int yBlanco = 7;
-    int xNegro = 4;
-    int yNegro = 0;
+    int xBlanco;
+    int yBlanco;
+    int xNegro;
+    int yNegro;
 
 public:
     Tablero();
@@ -38,6 +38,7 @@ public:
     void devolverFicha(string mov);
     bool validarMovimiento(string mov, int jugador);
     bool estoyEnJaque(int jugadorA, int opci);
+    bool estoyEnJaqueMate(int jugadorA, int opci);
     void jugar();
 };
 

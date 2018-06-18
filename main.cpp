@@ -23,7 +23,7 @@ int main()
  // cout << tablero.veriMov("b7 a c2");
   //tablero.moverFicha("b6 a b4");
 
-  tablero.moverFicha("b6 a b5");
+/*  tablero.moverFicha("b6 a b5");
   tablero.moverFicha("b0 a c4");
   tablero.moverFicha("c4 a d6");
   tablero.moverFicha("a6 a d1");
@@ -89,7 +89,18 @@ int main()
  // cout << tablero.validarMovimiento("d2 a a5",1) << endl;
  // cout << tablero.validarMovimiento("d2 a g5",1) << endl;
 
-   // cout << tablero.validarMovimiento("b4 a g5",1) << endl;
+   // cout << tablero.validarMovimiento("b4 a g5",1) << endl;*/
+
+    // Probando jaque mate
+    tablero.moverFicha("e6 a e4");
+    tablero.moverFicha("e1 a e3");
+    tablero.moverFicha("f7 a c4");
+    tablero.moverFicha("d7 a f5");
+
+    //cout << tablero.validarMovimiento("f7 a c4",1) << endl;
+
+    //tablero.moverFicha("e1 a e0");
+
     tablero.jugar();
 
 
@@ -97,8 +108,6 @@ int main()
   //cout << "rey blanco: Y:" << tablero.getYblanco() << " X:" << tablero.getXblanco() << endl;
 
   //cout << tablero.estoyEnJaque(1);
-
-
 
     return 0;
 }
