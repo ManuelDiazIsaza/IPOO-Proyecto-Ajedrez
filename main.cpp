@@ -75,6 +75,9 @@ int main()
 //  tablero.moverFicha("c3 a d3");
 //  tablero.moverFicha("b1 a b4");
 
+
+
+
   //  tablero.moverFicha("a6 a a3");
   //  tablero.moverFicha("d1 a d5");
  // tablero.impTablero();
