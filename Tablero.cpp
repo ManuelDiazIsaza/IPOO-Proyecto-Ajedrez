@@ -367,6 +367,416 @@ void Tablero::devolverFicha(string mov)
     }
 }
 
+bool Tablero::validarMovimiento(int xIni, int yIni, int xFin, int yFin, int jugador)
+{
+    // espacios a moverse
+    int difFilas = yFin - yIni;
+    int difCol = xFin - xIni;
+
+    if(tablero[yIni][xIni].getIdChar()==' ')
+    {
+        return false;
+    }
+    if(tablero[yIni][xIni].getJugador()!=jugador)
+    {
+        return false;
+    }
+    if(tablero[yFin][xFin].getJugador()==jugador)
+    {
+        return false;
+    }
+
+    // Validacion Peones Blancos
+
+    if(tablero[yIni][xIni].getIdChar() == 'P' && jugador == 1)
+    {
+        if(tablero[yFin][xFin].getJugador() == 2 && difFilas == -1 && abs(difCol) == 1)
+        {
+            return true;
+        }
+        else if(yIni != 6 && abs(difFilas) >= 2)
+        {
+            return false;
+        }
+        else if(yIni == 6 && abs(difFilas) > 2)
+        {
+            return false;
+        }
+        else if(yIni == 6 && tablero[yFin][xFin].getIdChar()!= ' ' && abs(difFilas) ==2) // corregir
+        {
+            return false;
+        }
+        else if(yIni == 6 && tablero[yIni-1][xIni].getIdChar()!= ' ' && abs(difFilas) ==2) // corregir
+        {
+            return false;
+        }
+        else if(yIni == 6 && tablero[yFin][xFin].getIdChar()!= ' ' && abs(difFilas) ==1) // corregir
+        {
+            return false;
+        }
+        else if(difFilas < -1 && yIni!=6)
+        {
+            return false;
+        }
+        else if(abs(difCol) > 0)
+        {
+            return false;
+        }
+        else if(yFin > yIni)
+        {
+            return false;
+        }
+        else if(tablero[yIni-1][xIni].getIdChar()!=' ')
+        {
+            return false;
+        }
+        else
+        {
+            return true;
+        }
+
+
+    }
+
+    // Validacion Peones Negros
+
+    if(tablero[yIni][xIni].getIdChar() == 'p' && jugador == 2)
+    {
+        if(tablero[yFin][xFin].getJugador() == 1 && difFilas == 1 && abs(difCol) == 1)
+        {
+            return true;
+        }
+        else if(yIni != 1 && abs(difFilas) >= 2)
+        {
+            return false;
+        }
+        else if(yIni == 1 && abs(difFilas) > 2)
+        {
+            return false;
+        }
+        else if(yIni == 1 && tablero[yFin][xFin].getIdChar()!= ' ' && abs(difFilas) ==2) // corregir
+        {
+            return false;
+        }
+        else if(yIni == 1 && tablero[yIni+1][xIni].getIdChar()!= ' ' && abs(difFilas) ==2) // corregir
+        {
+            return false;
+        }
+        else if(yIni == 1 && tablero[yFin][xFin].getIdChar()!= ' ' && abs(difFilas) ==1) // corregir
+        {
+            return false;
+        }
+        else if(difFilas > 1 && yIni!=1)
+        {
+            return false;
+        }
+        else if(abs(difCol) > 0)
+        {
+            return false;
+        }
+        else if(yFin < yIni)
+        {
+            return false;
+        }
+        else if(tablero[yIni+1][xIni].getIdChar()!=' ')
+        {
+            return false;
+        }
+        else
+        {
+            return true;
+        }
+    }
+
+    //REY DE CUALQUIER JUGADOR
+    if(tablero[yIni][xIni].getIdChar()== 'K' || tablero[yIni][xIni].getIdChar()== 'k')
+    {
+        if(abs(difCol) > 1 || abs(difFilas) > 1)
+        {
+            return false;
+        }
+        else if(tablero[yFin][xFin].getJugador()!=jugador && tablero[yFin][xFin].getJugador()!=0)
+        {
+            return true;
+        }
+        else
+        {
+            return true;
+        }
+
+    }
+
+    //Torres de cualquier jugador
+    if(tablero[yIni][xIni].getIdChar()== 'T' || tablero[yIni][xIni].getIdChar()== 't')
+    {
+        if(abs(difCol) != 0 && abs(difFilas) != 0)
+        {
+            return false;
+        }
+        else if(difCol == 0 && difFilas > 0)
+        {
+            for(int i=yIni+1;i<yFin;i++)
+            {
+                if(tablero[i][xIni].getIdChar()!=' ')
+                {
+                    return false;
+                }
+            }
+        }
+        else if(difCol == 0 && difFilas < 0)
+        {
+            for(int i=yIni-1;i>yFin;i--)
+            {
+                if(tablero[i][xIni].getIdChar()!=' ')
+                {
+                    return false;
+                }
+            }
+        }
+        else if(difCol > 0 && difFilas == 0)
+        {
+            for(int i=xIni+1;i<xFin;i++)
+            {
+                if(tablero[yIni][i].getIdChar()!=' ')
+                {
+                    return false;
+                }
+            }
+        }
+        else if(difCol < 0 && difFilas == 0)
+        {
+            for(int i=xIni-1;i>xFin;i--)
+            {
+                if(tablero[yIni][i].getIdChar()!=' ')
+                {
+                    return false;
+                }
+            }
+        }
+
+        if(tablero[yFin][xFin].getJugador()!=jugador && tablero[yFin][xFin].getJugador()!=0)
+        {
+           return true;
+        }
+        else
+        {
+            return true;
+        }
+    }
+
+    //Alfiles de cualquier jugador
+
+    if(tablero[yIni][xIni].getIdChar()== 'a' || tablero[yIni][xIni].getIdChar()== 'A')
+    {
+        if(abs(difCol)!=abs(difFilas))
+        {
+            return false;
+        }
+        else if(difCol > 0 && difFilas < 0)
+        {
+            int x = xIni+1;
+            int y = yIni-1;
+            while(y!=yFin)
+            {
+                if(tablero[y][x].getIdChar()!=' ')
+                {
+                    return false;
+                }
+                y = y-1;
+                x = x+1;
+            }
+        }
+        else if(difCol > 0 && difFilas > 0)
+        {
+            int x = xIni+1;
+            int y = yIni+1;
+            while(y!=yFin)
+            {
+                if(tablero[y][x].getIdChar()!=' ')
+                {
+                    return false;
+                }
+                y = y+1;
+                x = x+1;
+            }
+        }
+        else if(difCol < 0 && difFilas < 0)
+        {
+            int x = xIni-1;
+            int y = yIni-1;
+            while(y!=yFin)
+            {
+                if(tablero[y][x].getIdChar()!=' ')
+                {
+                   return false;
+                }
+                y = y-1;
+                x = x-1;
+            }
+        }
+        else if(difCol < 0 && difFilas > 0)
+        {
+            int x = xIni-1;
+            int y = yIni+1;
+            while(y!=yFin)
+            {
+                if(tablero[y][x].getIdChar()!=' ')
+                {
+                    return false;
+                }
+                y = y+1;
+                x = x-1;
+            }
+        }
+
+        if(tablero[yFin][xFin].getJugador()!=jugador && tablero[yFin][xFin].getJugador()!=0)
+        {
+            return true;
+        }
+
+        else
+        {
+            return true;
+        }
+    }
+
+    //Caballos cualquier jugador
+    if(tablero[yIni][xIni].getIdChar()== 'c' || tablero[yIni][xIni].getIdChar()== 'C')
+    {
+        if (abs(difCol)*abs(difFilas) != 2)
+        {
+            return false;
+        }
+
+        if (tablero[yFin][xFin].getJugador()!=jugador && tablero[yFin][xFin].getJugador()!=0)
+        {
+            return true;
+        }
+        else
+        {
+            return true;
+        }
+    }
+
+
+    //Reina de cualquier jugador
+
+    if(tablero[yIni][xIni].getIdChar()== 'q' || tablero[yIni][xIni].getIdChar()== 'Q')
+    {
+        if(abs(difCol) != 0 && abs(difFilas) != 0 && abs(difCol)!=abs(difFilas))
+        {
+            return false;
+        }
+        else if(difCol == 0 && difFilas > 0)
+        {
+            for(int i=yIni+1;i<yFin;i++)
+            {
+                if(tablero[i][xIni].getIdChar()!=' ')
+                {
+                    return false;
+                }
+            }
+        }
+        else if(difCol == 0 && difFilas < 0)
+        {
+            for(int i=yIni-1;i>yFin;i--)
+            {
+                if(tablero[i][xIni].getIdChar()!=' ')
+                {
+                    return false;
+                }
+            }
+        }
+        else if(difCol > 0 && difFilas == 0)
+        {
+            for(int i=xIni+1;i<xFin;i++)
+            {
+                if(tablero[yIni][i].getIdChar()!=' ')
+                {
+                    return false;
+                }
+            }
+        }
+        else if(difCol < 0 && difFilas == 0)
+        {
+            for(int i=xIni-1;i>xFin;i--)
+            {
+                if(tablero[yIni][i].getIdChar()!=' ')
+                {
+                    return false;
+                }
+            }
+        }
+        else if(difCol > 0 && difFilas < 0)
+        {
+            int x = xIni+1;
+            int y = yIni-1;
+            while(y!=yFin)
+            {
+                if(tablero[y][x].getIdChar()!=' ')
+                {
+                    return false;
+                }
+                y = y-1;
+                x = x+1;
+            }
+        }
+        else if(difCol > 0 && difFilas > 0)
+        {
+            int x = xIni+1;
+            int y = yIni+1;
+            while(y!=yFin)
+            {
+                if(tablero[y][x].getIdChar()!=' ')
+                {
+                    return false;
+                }
+                y = y+1;
+                x = x+1;
+            }
+        }
+        else if(difCol < 0 && difFilas < 0)
+        {
+            int x = xIni-1;
+            int y = yIni-1;
+            while(y!=yFin)
+            {
+                if(tablero[y][x].getIdChar()!=' ')
+                {
+                    return false;
+                }
+                y = y-1;
+                x = x-1;
+            }
+        }
+        else if(difCol < 0 && difFilas > 0)
+        {
+            int x = xIni-1;
+            int y = yIni+1;
+            while(y!=yFin)
+            {
+                if(tablero[y][x].getIdChar()!=' ')
+                {
+                    return false;
+                }
+                y = y+1;
+                x = x-1;
+            }
+        }
+
+        if(tablero[yFin][xFin].getJugador()!=jugador && tablero[yFin][xFin].getJugador()!=0)
+        {
+            return true;
+        }
+        else
+        {
+            return true;
+        }
+    }
+}
+
+// revisar bien caballos y probar bien los peones
+
 bool Tablero::validarMovimiento(string mov, int jugador)
 {
     int xIni;
@@ -631,8 +1041,8 @@ bool Tablero::validarMovimiento(string mov, int jugador)
 
         if(tablero[yFin][xFin].getJugador()!=jugador && tablero[yFin][xFin].getJugador()!=0)
         {
-           cout << "Te has comido " << tablero[yFin][xFin].getNombre() << endl;
-           return true;
+            cout << "Te has comido " << tablero[yFin][xFin].getNombre() << endl;
+            return true;
         }
         else
         {
@@ -687,8 +1097,8 @@ bool Tablero::validarMovimiento(string mov, int jugador)
             {
                 if(tablero[y][x].getIdChar()!=' ')
                 {
-                   cout << "Hay una ficha bloqueando el camino arriba a la izquierda." << endl;
-                   return false;
+                    cout << "Hay una ficha bloqueando el camino arriba a la izquierda." << endl;
+                    return false;
                 }
                 y = y-1;
                 x = x-1;
@@ -1038,7 +1448,7 @@ bool Tablero::estoyEnJaque(int jugadorA,int opci)
     return devolver;
 }
 
-bool Tablero::estoyEnJaqueMate(int jugadorA,int opci)
+bool Tablero::estoyEnJaqueMate(int jugadorA)
 {
     bool devolver = false;
     for(int i=0;i<8;i++)
@@ -1167,7 +1577,6 @@ bool Tablero::estoyEnJaqueMate(int jugadorA,int opci)
                     else
                         movim[6] = '7';
                 }
-                //cout << movim << endl;
 
                 cout.setstate(ios_base::failbit);
                 if(jugadorA==1)
@@ -1176,12 +1585,11 @@ bool Tablero::estoyEnJaqueMate(int jugadorA,int opci)
                     if(validarMovimiento(movim,2))
                     {
                         cout.clear();
-                        cout << "La ficha " << tablero[i][j].getNombre();
-                        if(opci==0)
-                            cout << " te tiene en jaque." << endl;
-                        else
-                            cout << " te tendria en jaque si haces este movimiento" << endl;
-                        devolver = true;
+                        if(!interponerEnJaque(tablero[i][j].getIdChar(),i,j,jugadorA))
+                        {
+                            cout << "Estas en jaque mate, has perdido." << endl;
+                            devolver = true;
+                        }
                     }
                 }
                 else
@@ -1189,12 +1597,11 @@ bool Tablero::estoyEnJaqueMate(int jugadorA,int opci)
                     if(validarMovimiento(movim,1))
                     {
                         cout.clear();
-                        cout << "La ficha " << tablero[i][j].getNombre();
-                        if(opci==0)
-                            cout << " te tiene en jaque." << endl;
-                        else
-                            cout << " te tendria en jaque si haces este movimiento" << endl;
-                        devolver = true;
+                        if(!interponerEnJaque(tablero[i][j].getIdChar(),i,j,jugadorA))
+                        {
+                            cout << "Estas en jaque mate, has perdido." << endl;
+                            devolver = true;
+                        }
                     }
                 }
                 cout.clear();
@@ -1205,15 +1612,15 @@ bool Tablero::estoyEnJaqueMate(int jugadorA,int opci)
     return devolver;
 }
 
-
 void Tablero::jugar()
 {
     bool gameover=false;
-    int jugadorActual=1;
+    int jugadorActual=2;
     string jugada;
 
     while(!gameover)
     {
+        bool movValido = false;
         impTablero();
 
         cout << "Turno para ";
@@ -1226,9 +1633,16 @@ void Tablero::jugar()
             cout << "fichas negras." << endl;
         }
 
-        estoyEnJaque(jugadorActual,0);
+        if(estoyEnJaque(jugadorActual,0))
+        {
+            if(estoyEnJaqueMate(jugadorActual))
+            {
+                movValido=true;
+                gameover=true;
+            }
+        }
 
-        bool movValido = false;
+
         while(!movValido)
         {
             cout << "Introduzca su jugada con el siguiente formato (a5 a b7):";
@@ -1264,7 +1678,427 @@ void Tablero::jugar()
             jugadorActual=1;
         }
 
-        cout << "rey negro: Y:" << getYnegro() << " X:" << getXnegro() << endl;
-        cout << "rey blanco: Y:" << getYblanco() << " X:" << getXblanco() << endl;
+        //cout << "rey negro: Y:" << getYnegro() << " X:" << getXnegro() << endl;
+        //cout << "rey blanco: Y:" << getYblanco() << " X:" << getXblanco() << endl;
     }
+}
+
+bool Tablero::interponerEnJaque(char tipoF, int yIni, int xIni, int jugadorA)
+{
+    int xFin;
+    int yFin;
+    if(jugadorA==1)
+    {
+        xFin = getXblanco();
+        yFin = getYblanco();
+    } else
+    {
+        xFin = getXnegro();
+        yFin = getYnegro();
+    }
+
+    // espacios a moverse
+    int difFilas = yFin - yIni;
+    int difCol = xFin - xIni;
+
+    //cout << "Diferencia Filas: " << difFilas << endl;
+    //cout << "Diferencia Columnas: " << difCol << endl;
+
+    //Cuando la que hace jaque es una torre
+    if(tipoF=='t' || tipoF=='T')
+    {
+        if(difCol > 0 && difFilas == 0)
+        {
+            for(int i=xIni;i<xFin;i++)
+            {
+                for(int k=0;k<8;k++)
+                {
+                     for(int l=0;l<8;l++)
+                     {
+                         if(tablero[k][l].getJugador()==jugadorA && (l!=xFin || k!=yFin))
+                         {
+                             if(validarMovimiento(l,k,i,yIni,jugadorA))
+                             {
+                                 //cout << k << " " << l << tablero[k][l].getNombre() << endl;
+                                 return true;
+                             }
+                         }
+                     }
+                }
+            }
+        }
+        else if(difCol == 0 && difFilas > 0)
+        {
+            for(int i=yIni;i<yFin;i++)
+            {
+                for(int k=0;k<8;k++)
+                {
+                    for(int l=0;l<8;l++)
+                    {
+                        if(tablero[k][l].getJugador()==jugadorA && (l!=xFin || k!=yFin))
+                        {
+                            if(validarMovimiento(l,k,i,yIni,jugadorA))
+                            {
+                                //cout << k << " " << l << tablero[k][l].getNombre() << endl;
+                                return true;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        else if(difCol == 0 && difFilas < 0)
+        {
+            for(int i=yIni;i>yFin;i--)
+            {
+                for(int k=0;k<8;k++)
+                {
+                    for(int l=0;l<8;l++)
+                    {
+                        if(tablero[k][l].getJugador()==jugadorA && (l!=xFin || k!=yFin))
+                        {
+                            if(validarMovimiento(l,k,i,yIni,jugadorA))
+                            {
+                                //cout << k << " " << l << tablero[k][l].getNombre() << endl;
+                                return true;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        else if(difCol < 0 && difFilas == 0)
+        {
+            for(int i=xIni;i>xFin;i--)
+            {
+                for(int k=0;k<8;k++)
+                {
+                    for(int l=0;l<8;l++)
+                    {
+                        if(tablero[k][l].getJugador()==jugadorA && (l!=xFin || k!=yFin))
+                        {
+                            if(validarMovimiento(l,k,i,yIni,jugadorA))
+                            {
+                                //cout << k << " " << l << tablero[k][l].getNombre() << endl;
+                                return true;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    //cuando la que hace jaque es un alfil
+    if(tipoF=='a' || tipoF=='A')
+    {
+        if(difCol > 0 && difFilas < 0)
+        {
+            int x = xIni;
+            int y = yIni;
+            while(y!=yFin)
+            {
+                for(int k=0;k<8;k++)
+                {
+                    for(int l=0;l<8;l++)
+                    {
+                        if(tablero[k][l].getJugador()==jugadorA && (l!=xFin || k!=yFin))
+                        {
+                            if(validarMovimiento(l,k,x,y,jugadorA))
+                            {
+                                //cout << k << " " << l << tablero[k][l].getNombre() << endl;
+                                return true;
+                            }
+                        }
+                    }
+                }
+                y = y-1;
+                x = x+1;
+            }
+        }
+        else if(difCol > 0 && difFilas > 0)
+        {
+            int x = xIni;
+            int y = yIni;
+            while(y!=yFin)
+            {
+                for(int k=0;k<8;k++)
+                {
+                    for(int l=0;l<8;l++)
+                    {
+                        if(tablero[k][l].getJugador()==jugadorA && (l!=xFin || k!=yFin))
+                        {
+                            if(validarMovimiento(l,k,x,y,jugadorA))
+                            {
+                                //cout << k << " " << l << tablero[k][l].getNombre() << endl;
+                                return true;
+                            }
+                        }
+                    }
+                }
+                y = y+1;
+                x = x+1;
+            }
+        }
+        else if(difCol < 0 && difFilas < 0)
+        {
+            int x = xIni;
+            int y = yIni;
+            while(y!=yFin)
+            {
+                for(int k=0;k<8;k++)
+                {
+                    for(int l=0;l<8;l++)
+                    {
+                        if(tablero[k][l].getJugador()==jugadorA && (l!=xFin || k!=yFin))
+                        {
+                            if(validarMovimiento(l,k,x,y,jugadorA))
+                            {
+                                //cout << k << " " << l << tablero[k][l].getNombre() << endl;
+                                return true;
+                            }
+                        }
+                    }
+                }
+                y = y-1;
+                x = x-1;
+            }
+        }
+        else if(difCol < 0 && difFilas > 0)
+        {
+            int x = xIni;
+            int y = yIni;
+            while(y!=yFin)
+            {
+                //cout << x << " " << y << endl;
+
+                for(int k=0;k<8;k++)
+                {
+                    for(int l=0;l<8;l++)
+                    {
+                        if(tablero[k][l].getJugador()==jugadorA && (l!=xFin || k!=yFin))
+                        {
+
+                            if(validarMovimiento(l,k,x,y,jugadorA))
+                            {
+                                //cout << k << " " << l << tablero[k][l].getNombre() << endl;
+                                return true;
+                            }
+                        }
+                    }
+                }
+                y = y+1;
+                x = x-1;
+            }
+        }
+    }
+
+    //cuando la que hace el jaque es una reina
+
+    if(tipoF=='q' || tipoF=='Q')
+    {
+        if(difCol > 0 && difFilas < 0)
+        {
+            int x = xIni;
+            int y = yIni;
+            while(y!=yFin)
+            {
+                for(int k=0;k<8;k++)
+                {
+                    for(int l=0;l<8;l++)
+                    {
+                        if(tablero[k][l].getJugador()==jugadorA && (l!=xFin || k!=yFin))
+                        {
+                            if(validarMovimiento(l,k,x,y,jugadorA))
+                            {
+                                //cout << k << " " << l << tablero[k][l].getNombre() << endl;
+                                return true;
+                            }
+                        }
+                    }
+                }
+                y = y-1;
+                x = x+1;
+            }
+        }
+        else if(difCol > 0 && difFilas > 0)
+        {
+            int x = xIni;
+            int y = yIni;
+            while(y!=yFin)
+            {
+                for(int k=0;k<8;k++)
+                {
+                    for(int l=0;l<8;l++)
+                    {
+                        if(tablero[k][l].getJugador()==jugadorA && (l!=xFin || k!=yFin))
+                        {
+                            if(validarMovimiento(l,k,x,y,jugadorA))
+                            {
+                                //cout << k << " " << l << tablero[k][l].getNombre() << endl;
+                                return true;
+                            }
+                        }
+                    }
+                }
+                y = y+1;
+                x = x+1;
+            }
+        }
+        else if(difCol < 0 && difFilas < 0)
+        {
+
+            int x = xIni;
+            int y = yIni;
+
+            //cout << "x:" << x << " y:" << y;
+            while(y!=yFin)
+            {
+                //cout << y << " " << x << endl;
+                for(int k=0;k<8;k++)
+                {
+                    for(int l=0;l<8;l++)
+                    {
+                        //cout << " l:" << l << " k:" << k << " x:" << x << " y:" << y;
+                        if(tablero[k][l].getJugador()==jugadorA && (l!=xFin || k!=yFin))
+                        {
+                            //cout << " l:" << l << " k:" << k << " x:" << x << " y:" << y << endl;
+                            if(validarMovimiento(l,k,x,y,jugadorA))
+                            {
+                                //cout << k << " asdasd " << l << tablero[k][l].getNombre() << endl;
+                                return true;
+                            }
+                        }
+                    }
+                }
+                y = y-1;
+                x = x-1;
+            }
+        }
+        else if(difCol < 0 && difFilas > 0)
+        {
+            int x = xIni;
+            int y = yIni;
+            while(y!=yFin)
+            {
+                for(int k=0;k<8;k++)
+                {
+                    for(int l=0;l<8;l++)
+                    {
+                        if(tablero[k][l].getJugador()==jugadorA && (l!=xFin || k!=yFin))
+                        {
+                            if(validarMovimiento(l,k,x,y,jugadorA))
+                            {
+                                //cout << k << " " << l << tablero[k][l].getNombre() << endl;
+                                return true;
+                            }
+                        }
+                    }
+                }
+                y = y+1;
+                x = x-1;
+            }
+        }
+        else if(difCol > 0 && difFilas == 0)
+        {
+            for(int i=xIni;i<xFin;i++)
+            {
+                for(int k=0;k<8;k++)
+                {
+                    for(int l=0;l<8;l++)
+                    {
+
+                        if(tablero[k][l].getJugador()==jugadorA && (l!=xFin || k!=yFin))
+                        {
+                            if(validarMovimiento(l,k,i,yIni,jugadorA))
+                            {
+                                //cout << k << " " << l << tablero[k][l].getNombre() << endl;
+                                return true;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        else if(difCol == 0 && difFilas > 0)
+        {
+
+            for(int i=yIni;i<yFin;i++)
+            {
+                for(int k=0;k<8;k++)
+                {
+                    for(int l=0;l<8;l++)
+                    {
+                        if(tablero[k][l].getJugador()==jugadorA && (l!=xFin || k!=yFin))
+                        {
+                            if(validarMovimiento(l,k,i,yIni,jugadorA))
+                            {
+                                //cout << k << " " << l << tablero[k][l].getNombre() << endl;
+                                return true;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        else if(difCol == 0 && difFilas < 0)
+        {
+            for(int i=yIni;i>yFin;i--)
+            {
+                for(int k=0;k<8;k++)
+                {
+                    for(int l=0;l<8;l++)
+                    {
+                        if(tablero[k][l].getJugador()==jugadorA && (l!=xFin || k!=yFin))
+                        {
+                            if(validarMovimiento(l,k,i,yIni,jugadorA))
+                            {
+                                //cout << k << " " << l << tablero[k][l].getNombre() << endl;
+                                return true;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        else if(difCol < 0 && difFilas == 0)
+        {
+            for(int i=xIni;i>xFin;i--)
+            {
+                for(int k=0;k<8;k++)
+                {
+                    for(int l=0;l<8;l++)
+                    {
+                        if(tablero[k][l].getJugador()==jugadorA && (l!=xFin || k!=yFin))
+                        {
+                            if(validarMovimiento(l,k,i,yIni,jugadorA))
+                            {
+                                //cout << k << " " << l << tablero[k][l].getNombre() << endl;
+                                return true;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    if(tipoF=='c' || tipoF=='C' || tipoF=='p' || tipoF=='P')
+    {
+        for(int k=0;k<8;k++)
+        {
+            for(int l=0;l<8;l++)
+            {
+                if(tablero[k][l].getJugador()==jugadorA && (l!=xFin || k!=yFin))
+                {
+                    if(validarMovimiento(l,k,xIni,yIni,jugadorA))
+                    {
+                        //cout << k << " " << l << tablero[k][l].getNombre() << endl;
+                        return true;
+                    }
+                }
+            }
+        }
+    }
+    return false;
 }

@@ -37,8 +37,11 @@ public:
     void moverFicha(string mov);
     void devolverFicha(string mov);
     bool validarMovimiento(string mov, int jugador);
+    bool validarMovimiento(int xIni, int yIni, int xFin, int yFin, int jugador);
     bool estoyEnJaque(int jugadorA, int opci);
-    bool estoyEnJaqueMate(int jugadorA, int opci);
+    bool estoyEnJaqueMate(int jugadorA);
+
+    bool interponerEnJaque(char tipoF, int yIni, int xIni, int jugadorA);
     void jugar();
 };
 
