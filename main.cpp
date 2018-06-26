@@ -96,10 +96,13 @@ int main()
     tablero.moverFicha("e1 a e3");
     tablero.moverFicha("f7 a c4");
     tablero.moverFicha("d7 a f5");
-    //tablero.moverFicha("g0 a h2");
+    tablero.moverFicha("g0 a h2");
     tablero.moverFicha("f5 a h3");
     tablero.moverFicha("f1 a f5");
     tablero.moverFicha("h3 a f1");
+    tablero.moverFicha("d0 a a2");
+    tablero.moverFicha("c7 a g3");
+    //tablero.moverFicha("h3 a f1");
     //tablero.moverFicha("b0 a d2");
     //tablero.moverFicha("d0 a e1");
     //tablero.moverFicha("d1 a d4");
@@ -108,6 +111,13 @@ int main()
     //tablero.moverFicha("d7 a d5");
     //tablero.moverFicha("d1 a d2");
 
+    //tablero.moverFicha("a0 a d2");
+    //tablero.moverFicha("e7 a d5");
+    //tablero.moverFicha("b7 a c5");
+    //tablero.moverFicha("a7 a a4");
+    //otros
+    //tablero.moverFicha("a7 a d7");
+    //tablero.moverFicha("h7 a f7");
     //cout << tablero.interponerEnJaque('Q',1,5,2);
 
     //cout << tablero.validarMovimiento("f7 a c4",1) << endl;
@@ -116,8 +126,14 @@ int main()
 
     tablero.jugar();
 
-    //tablero.impTablero();
+   // tablero.impTablero();
 
+    //cout << endl << tablero.estoyEnJaqueMate(2);
+
+   // cout << endl << tablero.getXblanco() << endl;
+   // cout << tablero.getYblanco() << endl;
+
+    //cout << tablero.validarMovimiento(4,7,3,7,1);
 
 
   //cout << "rey negro: Y:" << tablero.getYnegro() << " X:" << tablero.getXnegro() << endl;
