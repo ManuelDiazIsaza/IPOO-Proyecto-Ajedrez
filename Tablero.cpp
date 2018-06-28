@@ -1,4 +1,15 @@
+/*
+  Archivo: Tablero.cpp
+  Autor: Manuel Diaz COD 1741652 - Jeffrey Rios COD 1744831 - Juan Camargo COD 1741510
+  Email: manuel.isaza@correounivalle.edu.co - jeffrey.rios@correounivalle.edu.co - camargo.juan@correounivalle.edu.co
+  Fecha creacion: 2018-05-14
+  Fecha ultima modificacion: 2018-06-25
+  Version: 0.1
+  Licencia: GPL
+*/
 
+// Responsabilidad: Clase que maneja todos los movimientos y validaciones de las fichas en un tablero de ajedrez.
+// Colaboracion: Fichas.h
 
 #include "Tablero.h"
 #include <string>
@@ -194,9 +205,9 @@ bool Tablero::veriMov(string mov)
        mov[5] != 'A' && mov[5] != 'B' && mov[5] != 'C' && mov[5] != 'D' &&
        mov[5] != 'E' && mov[5] != 'F' && mov[5] != 'G' && mov[5] != 'H')
     {
-        return false;
-    }
 
+    return false;
+}
     //verificamos que el destino tenga un numero valido
     if(mov[6] != '0' && mov[6] != '1' && mov[6] != '2' && mov[6] != '3' && mov[6] != '4'
             && mov[6] != '5' && mov[6] != '6' && mov[6] != '7')
@@ -633,7 +644,7 @@ bool Tablero::validarMovimiento(string mov, int jugador)
             cout << "La torre no puede mover asi." << endl;
             return false;
         }
-        else if(difCol == 0 && difFilas > 0)
+        else if(difCol == 0 && difFilas > 0) // Validacion de arriba hacia abajo
         {
             for(int i=yIni+1;i<yFin;i++)
             {
@@ -644,7 +655,7 @@ bool Tablero::validarMovimiento(string mov, int jugador)
                 }
             }
         }
-        else if(difCol == 0 && difFilas < 0)
+        else if(difCol == 0 && difFilas < 0) // Validacion de abajo hacia arriba
         {
             for(int i=yIni-1;i>yFin;i--)
             {
@@ -655,7 +666,7 @@ bool Tablero::validarMovimiento(string mov, int jugador)
                 }
             }
         }
-        else if(difCol > 0 && difFilas == 0)
+        else if(difCol > 0 && difFilas == 0) // Validacion de izquierda a derecha
         {
             for(int i=xIni+1;i<xFin;i++)
             {
@@ -666,7 +677,7 @@ bool Tablero::validarMovimiento(string mov, int jugador)
                 }
             }
         }
-        else if(difCol < 0 && difFilas == 0)
+        else if(difCol < 0 && difFilas == 0) // Validacion de derecha a izquierda
         {
             for(int i=xIni-1;i>xFin;i--)
             {
@@ -799,7 +810,7 @@ bool Tablero::validarMovimiento(string mov, int jugador)
             cout << "La Reina no puede mover asi." << endl;
             return false;
         }
-        else if(difCol == 0 && difFilas > 0)
+        else if(difCol == 0 && difFilas > 0) // Validacion de arriba hacia abajo
         {
             for(int i=yIni+1;i<yFin;i++)
             {
@@ -810,7 +821,7 @@ bool Tablero::validarMovimiento(string mov, int jugador)
                 }
             }
         }
-        else if(difCol == 0 && difFilas < 0)
+        else if(difCol == 0 && difFilas < 0) // Validacion de abajo hacia arriba
         {
             for(int i=yIni-1;i>yFin;i--)
             {
@@ -821,7 +832,7 @@ bool Tablero::validarMovimiento(string mov, int jugador)
                 }
             }
         }
-        else if(difCol > 0 && difFilas == 0)
+        else if(difCol > 0 && difFilas == 0) // Validacion de izquierda a derecha
         {
             for(int i=xIni+1;i<xFin;i++)
             {
@@ -832,7 +843,7 @@ bool Tablero::validarMovimiento(string mov, int jugador)
                 }
             }
         }
-        else if(difCol < 0 && difFilas == 0)
+        else if(difCol < 0 && difFilas == 0) // Validacion derecha a izquierda
         {
             for(int i=xIni-1;i>xFin;i--)
             {
@@ -1458,7 +1469,7 @@ bool Tablero::estoyEnJaque(int jugadorA,int opci)
                 cout.setstate(ios_base::failbit); // para impedir que se impriman los couts
                 if(jugadorA==1) //cuando el jugador actual es el de las fichas blancas (jugador 1)
                 {
-                    if(validarMovimiento(movim,2)) //valido ese movimiento de la ficha enemiga hacia mi rey.
+                    if(validarMovimiento(movim,2)) //valido ese movimiento de la ficha enemiga(negra) hacia mi rey.
                     {
                         cout.clear(); // para volver a dejar que se impriman los couts
                         if(opci==0){
@@ -1496,6 +1507,7 @@ bool Tablero::estoyEnJaque(int jugadorA,int opci)
 bool Tablero::estoyEnJaqueMate(int jugadorA)
 {
     bool devolver = false;
+    //Aqui buscaremos todas las fichas enemigas y construiremos un movimiento(string) de todas las fichas enemigas hacia mi rey.
     for(int i=0;i<8;i++)
     {
         for(int j=0;j<8;j++)
@@ -1623,12 +1635,13 @@ bool Tablero::estoyEnJaqueMate(int jugadorA)
                         movim[6] = '7';
                 }
 
-                cout.setstate(ios_base::failbit);
-                if(jugadorA==1)
+                cout.setstate(ios_base::failbit);// para impedir que se impriman los couts
+                if(jugadorA==1) //cuando el jugador actual es el de las fichas blancas (jugador 1)
                 {
-                    if(validarMovimiento(movim,2))
+                    if(validarMovimiento(movim,2)) //valido ese movimiento de la ficha enemiga(negra) hacia mi rey.
                     {
-                        cout.clear();
+                        cout.clear();// para volver a dejar que se impriman los couts
+                        // Si ninguna de mis fichas(blancas) se puede interponer o comerse la ficha que hace jaque(negra) y si mi rey(blanco) no puede mover
                         if(!interponerEnJaque(tablero[i][j].getIdChar(),i,j,jugadorA) && !reyPuedeMover(jugadorA))
                         {
                             cout << "Estas en jaque mate, has perdido." << endl;
@@ -1637,11 +1650,12 @@ bool Tablero::estoyEnJaqueMate(int jugadorA)
                         }
                     }
                 }
-                else
+                else //cuando el jugador actual es el de las fichas negras (jugador 2)
                 {
-                    if(validarMovimiento(movim,1))
+                    if(validarMovimiento(movim,1)) //valido ese movimiento de la ficha enemiga(blanca) hacia mi rey.
                     {
-                        cout.clear();
+                        cout.clear();// para volver a dejar que se impriman los couts
+                        // Si ninguna de mis fichas(negras) se puede interponer o comerse la ficha que hace jaque(blanca) y si mi rey(negro) no puede mover
                         if(!interponerEnJaque(tablero[i][j].getIdChar(),i,j,jugadorA) && !reyPuedeMover(jugadorA))
                         {
                             cout << "Estas en jaque mate, has perdido." << endl;
@@ -2167,14 +2181,14 @@ bool Tablero::reyPuedeMover(int jugadorA)
 
 void Tablero::jugar()
 {
-    bool gameover=false;
-    int jugadorActual=2;
+    bool gameover=false; // determina cuando acaba el juego
+    int jugadorActual=1; //El jugador que empieza
     string jugada;
 
-    while(!gameover)
+    while(!gameover) //mientras que el juego no este terminado
     {
-        bool movValido = false;
-        impTablero();
+        bool movValido = false; //para validar que el movimiento sea correcto
+        impTablero(); //imprima el tablero
 
         cout << "Turno para ";
         if(jugadorActual==1)
@@ -2196,7 +2210,7 @@ void Tablero::jugar()
         }
 
 
-        while(!movValido)
+        while(!movValido) //mientras que el movimiento no sea valido
         {
             cout << "Introduzca su jugada con el siguiente formato (a5 a b7):";
             getline(cin, jugada);

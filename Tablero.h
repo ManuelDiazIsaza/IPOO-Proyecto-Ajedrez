@@ -1,4 +1,15 @@
+/*
+  Archivo: Tablero.h
+  Autor: Manuel Diaz COD 1741652 - Jeffrey Rios COD 1744831 - Juan Camargo COD 1741510
+  Email: manuel.isaza@correounivalle.edu.co - jeffrey.rios@correounivalle.edu.co - camargo.juan@correounivalle.edu.co
+  Fecha creacion: 2018-05-14
+  Fecha ultima modificacion: 2018-06-25
+  Version: 0.1
+  Licencia: GPL
+*/
 
+// Responsabilidad: Clase que maneja todos los movimientos y validaciones de las fichas en un tablero de ajedrez.
+// Colaboracion: Fichas.h
 
 #ifndef _TABLERO_
 #define _TABLERO_
@@ -24,16 +35,16 @@ public:
 
     // set and get
     void setXnegro(int xnegro);
-    int getXnegro();
+    int getXnegro(); // Obtener la coordenada x del rey negro
     void setYnegro(int ynegro);
-    int getYnegro();
+    int getYnegro(); // Obtener la coordenada y del rey negro
     void setXblanco(int xblanco);
-    int getXblanco();
+    int getXblanco(); // Obtener la coordenada x del rey blanco
     void setYblanco(int yblanco);
-    int getYblanco();
+    int getYblanco(); // Obtener la coordenada y del rey blanco
 
     //Imprimir tablero
-    void impTablero();
+    void impTablero(); // Imprime la matriz que representa el tablero
 
     //Verificaciones de movimientos
     bool veriMov(string mov); //Verifica el formato de un movimiento (d4 a f5)
