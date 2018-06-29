@@ -12,7 +12,6 @@
 // Colaboracion: Fichas.h
 
 #include "Tablero.h"
-#include "Fichas.h"
 #include <string>
 #include <stdio.h>
 #include <iostream>
@@ -2588,6 +2587,13 @@ void Tablero::guardarJugada(string mov)
     jugadas.push_back(guardar);
 }
 
+void Tablero::borrarUltimaJugada()
+{
+    vector<string>::iterator it;
+    it = jugadas.end();
+    jugadas.erase(it);
+}
+
 void Tablero::mostrarJugadas()
 {
     vector<string>::iterator it;
@@ -2597,14 +2603,7 @@ void Tablero::mostrarJugadas()
     }
 }
 
-void Tablero::borrarUltimaJugada()
-{
-    vector<string>::iterator it;
-    it = jugadas.end();
-    jugadas.erase(it);
-}
-
-void Tablero::menuPpal()
+void Tablero::menuPpal() //este menu no funciona bien, cuando trato de salir(0) despues de hacer cosas no funciona
 {
     int opcion = 0;
 
@@ -2612,17 +2611,17 @@ void Tablero::menuPpal()
     {
     cout << "*======================================================*"<<endl;
     cout << "*                     Bienvenid@ a                     *"<<endl;
-    cout << "*              Ajedrez por: Manuel Diaz                *"<<endl;
+    cout << "*               Ajedrez por: Manuel Diaz               *"<<endl;
     cout << "*======================================================*"<<endl;
     cout << "*                                                      *"<<endl;
-    cout << "*                   (1)Nuevo juego                     *"<<endl;
-    cout << "*                   (2)Continuar Partida               *"<<endl;
-    cout << "*                   (3)Guardar Partida                 *"<<endl;
-    cout << "*                   (4)Cargar Partida                  *"<<endl;
-    cout << "*                   (0)Salir                           *"<<endl;
+    cout << "*                 (1)Nuevo juego                       *"<<endl;
+    cout << "*                 (2)Continuar Partida                 *"<<endl;
+    cout << "*                 (3)Guardar Partida                   *"<<endl;
+    cout << "*                 (4)Cargar Partida                    *"<<endl;
+    cout << "*                 (0)Salir                             *"<<endl;
     cout << "*                                                      *"<<endl;
-    cout << "*======================================================*"<<endl<<endl;
-    cout << "Su opcion: " << endl;
+    cout << "*======================================================*"<<endl;
+    cout << "Su opcion: ";
         cin >> opcion;
         switch (opcion) {
             case 1:
