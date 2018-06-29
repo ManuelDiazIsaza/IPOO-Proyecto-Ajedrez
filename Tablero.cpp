@@ -2344,8 +2344,6 @@ void Tablero::jugar()
             cout << "fichas negras." << endl;
         }
 
-        //cout << jugadorActual<<endl;
-
         if(estoyEnJaque(jugadorActual,0)) // Verifico si el jugadorA esta en jaque
         {
             if(estoyEnJaqueMate(jugadorActual))  //Verifico si el jugadorA esta en jaque mate
@@ -2354,7 +2352,6 @@ void Tablero::jugar()
                 gameover=true;
             }
         }
-        //cin.ignore(); // para evitar un error, comentar esta linea para mirar que hace.
 
         while(!movValido) //mientras que el movimiento no sea valido
         {
@@ -2433,6 +2430,7 @@ void Tablero::guardarPartida(){
     guardar<<"***"<<endl;
     guardar<<'j'<<jugadorActual<<endl;
 
+    cout << "Partida guardada con exito" << endl;
     guardar.close();
 }
 
@@ -2558,6 +2556,7 @@ void Tablero::cargarPartida()
     }
     jugadas.pop_back();
     abrir.close();
+    cout << "Partida cargada con exito" << endl;
 }
 
 void Tablero::guardarJugada(string mov)
@@ -2645,7 +2644,7 @@ void Tablero::menuPpal()
                 break;
             default:
                 if (opcion != 0)
-                    cout << endl << "=== Opcion no valida ===" << endl;
+                    cout << "=== Opcion no valida ===" << endl;
         }
 
     } while (opcion != 0);
