@@ -12,11 +12,13 @@
 // Colaboracion: Fichas.h
 
 #include "Tablero.h"
+#include "Fichas.h"
 #include <string>
 #include <stdio.h>
 #include <iostream>
 #include <sstream>
 #include <windows.h>
+#include <fstream>
 
 using namespace std;
 
@@ -84,6 +86,8 @@ Tablero::Tablero(){
     yBlanco = 7;
     xNegro = 4;
     yNegro = 0;
+
+    int jugadorActual=1;
 }
 
 Tablero::~Tablero()
@@ -129,6 +133,89 @@ void Tablero::setYblanco(int yblanco)
 int Tablero::getYblanco()
 {
     return yBlanco;
+}
+
+void Tablero::nuevaPartida()
+{
+    //Fichas Jugador Blanco Jugador 1
+    Fichas pb('P',"PB","Peon Blanco",1);
+    Fichas tb('T',"TB","Torre Blanca",1);
+    Fichas cb('C',"CB","Caballo Blanco",1);
+    Fichas ab('A',"AB","Alfil blanco",1);
+    Fichas qb('Q',"QB","Reina Blanca",1);
+    Fichas kb('K',"KB","Rey Blanco",1);
+
+    //Fichas Jugador Negro Jugador 2
+
+    Fichas pn('p',"pn","Peon Negro",2);
+    Fichas tn('t',"tn","Torre Negro",2);
+    Fichas cn('c',"cn","Caballo Negro",2);
+    Fichas an('a',"an","Alfil Negro",2);
+    Fichas qn('q',"qn","Reina Negra",2);
+    Fichas kn('k',"kn","Rey Negro",2);
+
+    for(int i=0;i<8;i++)
+    {
+        for(int j=0;j<8;j++)
+        {
+            Fichas ficha1(' '," "," ",0);
+            tablero[i][j] = ficha1;
+        }
+    }
+
+    //Posicionamos las fichas negras arriba en el tablero
+    tablero[1][0] = pn;
+    tablero[1][1] = pn;
+    tablero[1][2] = pn;
+    tablero[1][3] = pn;
+    tablero[1][4] = pn;
+    tablero[1][5] = pn;
+    tablero[1][6] = pn;
+    tablero[1][7] = pn;
+
+    tablero[0][0] = tn;
+    tablero[0][1] = cn;
+    tablero[0][2] = an;
+    tablero[0][3] = qn;
+    tablero[0][4] = kn;
+    tablero[0][5] = an;
+    tablero[0][6] = cn;
+    tablero[0][7] = tn;
+
+    //Posicionamos las fichas blancas abajo en el tablero
+
+    tablero[6][0] = pb;
+    tablero[6][1] = pb;
+    tablero[6][2] = pb;
+    tablero[6][3] = pb;
+    tablero[6][4] = pb;
+    tablero[6][5] = pb;
+    tablero[6][6] = pb;
+    tablero[6][7] = pb;
+
+    tablero[7][0] = tb;
+    tablero[7][1] = cb;
+    tablero[7][2] = ab;
+    tablero[7][3] = qb;
+    tablero[7][4] = kb;
+    tablero[7][5] = ab;
+    tablero[7][6] = cb;
+    tablero[7][7] = tb;
+
+    //guardamos las posiciones de los reyes para facilitar detectar jaque y jaquemate
+    xBlanco = 4;
+    yBlanco = 7;
+    xNegro = 4;
+    yNegro = 0;
+
+
+    int tamano = jugadas.size();
+    for (int i = 0 ; i < tamano; i++)
+    {
+        jugadas.pop_back();
+    }
+
+    jugadorActual=1;
 }
 
 void Tablero::impTablero() {
@@ -2075,6 +2162,7 @@ bool Tablero::reyPuedeMover(int jugadorA)
 
     int xIni;
     int yIni;
+    int xTemp, yTemp;
     if(jugadorA==1) // conseguimos las coordenadas del rey del jugador actual
     {
         xIni = getXblanco();
@@ -2089,90 +2177,146 @@ bool Tablero::reyPuedeMover(int jugadorA)
 
     if(validarMovimiento(xIni,yIni,xIni-1,yIni-1,jugadorA) && yIni!=0 && xIni!=0)
     {
+        // Aqui copiare la casilla destino a un temporal, ya que si hay una ficha en la casilla destino esta desaparece
+        xTemp = xIni-1;
+        yTemp = yIni-1;
+        Fichas temp = tablero[yTemp][xTemp];
+
         moverFicha(xIni,yIni,xIni-1,yIni-1);
         if(!estoyEnJaque(jugadorA,2))
         {
             devolverFicha(xIni,yIni,xIni-1,yIni-1);
+            tablero[yIni-1][xIni-1] = temp;// vuelvo y pongo la ficha que estaba originalmente en la casilla
             return true;
         }
         devolverFicha(xIni,yIni,xIni-1,yIni-1);
+        tablero[yIni-1][xIni-1] = temp;// vuelvo y pongo la ficha que estaba originalmente en la casilla
     }
 
     if(validarMovimiento(xIni,yIni,xIni,yIni-1,jugadorA) && yIni!=0)
     {
+        // Aqui copiare la casilla destino a un temporal, ya que si hay una ficha en la casilla destino esta desaparece
+        xTemp = xIni;
+        yTemp = yIni-1;
+        Fichas temp = tablero[yTemp][xTemp];
+
         moverFicha(xIni,yIni,xIni,yIni-1);
         if(!estoyEnJaque(jugadorA,2))
         {
             devolverFicha(xIni,yIni,xIni,yIni-1);
+            tablero[yIni-1][xIni] = temp; // vuelvo y pongo la ficha que estaba originalmente en la casilla
             return true;
         }
         devolverFicha(xIni,yIni,xIni,yIni-1);
+        tablero[yIni-1][xIni] = temp; // vuelvo y pongo la ficha que estaba originalmente en la casilla
     }
 
     if(validarMovimiento(xIni,yIni,xIni+1,yIni-1,jugadorA) && yIni!=0 && xIni!=7)
     {
+        // Aqui copiare la casilla destino a un temporal, ya que si hay una ficha en la casilla destino esta desaparece
+        xTemp = xIni+1;
+        yTemp = yIni-1;
+        Fichas temp = tablero[yTemp][xTemp];
+
         moverFicha(xIni,yIni,xIni+1,yIni-1);
         if(!estoyEnJaque(jugadorA,2))
         {
             devolverFicha(xIni,yIni,xIni+1,yIni-1);
+            tablero[yIni-1][xIni+1] = temp; // vuelvo y pongo la ficha que estaba originalmente en la casilla
             return true;
         }
         devolverFicha(xIni,yIni,xIni+1,yIni-1);
+        tablero[yIni-1][xIni+1] = temp; // vuelvo y pongo la ficha que estaba originalmente en la casilla
     }
 
     if(validarMovimiento(xIni,yIni,xIni-1,yIni,jugadorA) && xIni!=0)
     {
+        // Aqui copiare la casilla destino a un temporal, ya que si hay una ficha en la casilla destino esta desaparece
+        xTemp = xIni-1;
+        yTemp = yIni;
+        Fichas temp = tablero[yTemp][xTemp];
+
         moverFicha(xIni,yIni,xIni-1,yIni);
         if(!estoyEnJaque(jugadorA,2))
         {
             devolverFicha(xIni,yIni,xIni-1,yIni);
+            tablero[yIni][xIni-1] = temp; // vuelvo y pongo la ficha que estaba originalmente en la casilla
             return true;
         }
         devolverFicha(xIni,yIni,xIni-1,yIni);
+        tablero[yIni][xIni-1] = temp; // vuelvo y pongo la ficha que estaba originalmente en la casilla
     }
 
     if(validarMovimiento(xIni,yIni,xIni+1,yIni,jugadorA) && xIni!=7)
     {
+        // Aqui copiare la casilla destino a un temporal, ya que si hay una ficha en la casilla destino esta desaparece
+        xTemp = xIni+1;
+        yTemp = yIni;
+        Fichas temp = tablero[yTemp][xTemp];
+
         moverFicha(xIni,yIni,xIni+1,yIni);
         if(!estoyEnJaque(jugadorA,2))
         {
             devolverFicha(xIni,yIni,xIni+1,yIni);
+            tablero[yIni][xIni+1] = temp; // vuelvo y pongo la ficha que estaba originalmente en la casilla
             return true;
         }
         devolverFicha(xIni,yIni,xIni+1,yIni);
+        tablero[yIni][xIni+1] = temp; // vuelvo y pongo la ficha que estaba originalmente en la casilla
     }
 
     if(validarMovimiento(xIni,yIni,xIni-1,yIni+1,jugadorA) && xIni!=0 && yIni!=7)
     {
+        // Aqui copiare la casilla destino a un temporal, ya que si hay una ficha en la casilla destino esta desaparece
+        xTemp = xIni-1;
+        yTemp = yIni+1;
+        Fichas temp = tablero[yTemp][xTemp];
+
         moverFicha(xIni,yIni,xIni-1,yIni+1);
         if(!estoyEnJaque(jugadorA,2))
         {
             devolverFicha(xIni,yIni,xIni-1,yIni+1);
+            tablero[yIni+1][xIni-1] = temp; // vuelvo y pongo la ficha que estaba originalmente en la casilla
             return true;
         }
         devolverFicha(xIni,yIni,xIni-1,yIni+1);
+        tablero[yIni+1][xIni-1] = temp; // vuelvo y pongo la ficha que estaba originalmente en la casilla
     }
 
     if(validarMovimiento(xIni,yIni,xIni,yIni+1,jugadorA) && yIni!=7)
     {
+        // Aqui copiare la casilla destino a un temporal, ya que si hay una ficha en la casilla destino esta desaparece
+        xTemp = xIni;
+        yTemp = yIni+1;
+        Fichas temp = tablero[yTemp][xTemp];
+
         moverFicha(xIni,yIni,xIni,yIni+1);
         if(!estoyEnJaque(jugadorA,2))
         {
             devolverFicha(xIni,yIni,xIni,yIni+1);
+            tablero[yIni+1][xIni] = temp; // vuelvo y pongo la ficha que estaba originalmente en la casilla
             return true;
         }
         devolverFicha(xIni,yIni,xIni,yIni+1);
+        tablero[yIni+1][xIni] = temp; // vuelvo y pongo la ficha que estaba originalmente en la casilla
     }
 
     if(validarMovimiento(xIni,yIni,xIni+1,yIni+1,jugadorA) && xIni!=7 && yIni!=7)
     {
+        // Aqui copiare la casilla destino a un temporal, ya que si hay una ficha en la casilla destino esta desaparece
+        xTemp = xIni+1;
+        yTemp = yIni+1;
+        Fichas temp = tablero[yTemp][xTemp];
+
         moverFicha(xIni,yIni,xIni+1,yIni+1);
         if(!estoyEnJaque(jugadorA,2))
         {
             devolverFicha(xIni,yIni,xIni+1,yIni+1);
+            tablero[yIni+1][xIni+1] = temp; // vuelvo y pongo la ficha que estaba originalmente en la casilla
             return true;
         }
         devolverFicha(xIni,yIni,xIni+1,yIni+1);
+        tablero[yIni+1][xIni+1] = temp; // vuelvo y pongo la ficha que estaba originalmente en la casilla
     }
     cout.clear();
 
@@ -2182,7 +2326,7 @@ bool Tablero::reyPuedeMover(int jugadorA)
 void Tablero::jugar()
 {
     bool gameover=false; // determina cuando acaba el juego
-    int jugadorActual=1; //El jugador que empieza
+    //int jugadorActual=1; //El jugador que empieza
     string jugada;
 
     while(!gameover) //mientras que el juego no este terminado
@@ -2200,6 +2344,8 @@ void Tablero::jugar()
             cout << "fichas negras." << endl;
         }
 
+        //cout << jugadorActual<<endl;
+
         if(estoyEnJaque(jugadorActual,0)) // Verifico si el jugadorA esta en jaque
         {
             if(estoyEnJaqueMate(jugadorActual))  //Verifico si el jugadorA esta en jaque mate
@@ -2208,21 +2354,32 @@ void Tablero::jugar()
                 gameover=true;
             }
         }
-
+        //cin.ignore(); // para evitar un error, comentar esta linea para mirar que hace.
 
         while(!movValido) //mientras que el movimiento no sea valido
         {
+            cout << "Escribe menu para ir al menu o jugadas para mostrar las jugadas de la partida" << endl;
             cout << "Introduzca su jugada con el siguiente formato (a5 a b7):";
             getline(cin, jugada);
 
-            if(veriMov(jugada)) // verifico que la persona haya escrito un movimiento correcto (formato correcto)
+            if(jugada == "menu")
+            {
+                menuPpal();
+            }
+            else if(jugada == "jugadas")
+            {
+                mostrarJugadas();
+            }
+            else if(veriMov(jugada)) // verifico que la persona haya escrito un movimiento correcto (formato correcto)
             {
                 if(validarMovimiento(jugada,jugadorActual)) // Si la jugada es valida
                 {
+                    guardarJugada(jugada); // guarda la jugada
                     moverFicha(jugada); // entonces mueva la ficha
                     if(estoyEnJaque(jugadorActual,1)) // si despues de mover esta ficha quedo en jaque entonces
                     {
                         devolverFicha(jugada); //devuelva la ficha
+                        borrarUltimaJugada(); // borra la ultima jugada en caso que le toque devolverse
                     }
                     else
                     {
@@ -2247,4 +2404,249 @@ void Tablero::jugar()
             jugadorActual=1;
         }
     }
+}
+
+void Tablero::guardarPartida(){
+
+    ofstream guardar;
+
+    guardar.open("partida.txt", ios::out);
+
+    for(int i=0;i<8;i++)
+    {
+        for(int j=0;j<8;j++)
+        {
+            if(tablero[i][j].getIdChar()!=' ')
+            {
+                guardar<<tablero[i][j].getIdChar()<<i<<j<<endl;
+            }
+
+        }
+    }
+    guardar<<"---"<<endl;
+    vector<string>::iterator it;
+    for(it = jugadas.begin(); it != jugadas.end(); it++)
+    {
+        guardar <<(*it) << endl;
+    }
+
+    guardar<<"***"<<endl;
+    guardar<<'j'<<jugadorActual<<endl;
+
+    guardar.close();
+}
+
+void Tablero::cargarPartida()
+{
+    //Fichas Jugador Blanco Jugador 1
+    Fichas pb('P', "PB", "Peon Blanco", 1);
+    Fichas tb('T', "TB", "Torre Blanca", 1);
+    Fichas cb('C', "CB", "Caballo Blanco", 1);
+    Fichas ab('A', "AB", "Alfil blanco", 1);
+    Fichas qb('Q', "QB", "Reina Blanca", 1);
+    Fichas kb('K', "KB", "Rey Blanco", 1);
+
+    //Fichas Jugador Negro Jugador 2
+
+    Fichas pn('p', "pn", "Peon Negro", 2);
+    Fichas tn('t', "tn", "Torre Negro", 2);
+    Fichas cn('c', "cn", "Caballo Negro", 2);
+    Fichas an('a', "an", "Alfil Negro", 2);
+    Fichas qn('q', "qn", "Reina Negra", 2);
+    Fichas kn('k', "kn", "Rey Negro", 2);
+
+    for(int i=0;i<8;i++)
+    {
+        for(int j=0;j<8;j++)
+        {
+           Fichas ficha1(' '," "," ",0);
+           tablero[i][j] = ficha1;
+        }
+    }
+
+    int tamano = jugadas.size();
+    for (int i = 0 ; i < tamano; i++)
+    {
+        jugadas.pop_back();
+    }
+
+    ifstream abrir;
+    string texto;
+    int numero;
+    int contador=0;
+    abrir.open("partida.txt", ios::in);
+    while (!abrir.eof()) {
+
+    getline(abrir, texto);
+
+    if(contador==2)
+    {
+        jugadorActual = (int)texto[1] - 48;
+        //cout << texto[1] << endl;
+    }
+    if(contador==1)
+    {
+        jugadas.push_back(texto);
+        if(texto[0]=='*')
+        {
+            contador=2;
+        }
+    }
+    if(contador==0)
+    {
+        int y = (int) texto[1] - 48;
+        int x = (int) texto[2] - 48;
+
+        if(texto[0]=='t')
+        {
+            tablero[y][x] = tn;
+        }
+        if(texto[0]=='T')
+        {
+            tablero[y][x] = tb;
+        }
+        if(texto[0]=='c')
+        {
+            tablero[y][x] = cn;
+        }
+        if(texto[0]=='C')
+        {
+            tablero[y][x] = cb;
+        }
+        if(texto[0]=='a')
+        {
+            tablero[y][x] = an;
+        }
+        if(texto[0]=='A')
+        {
+            tablero[y][x] = ab;
+        }
+        if(texto[0]=='q')
+        {
+            tablero[y][x] = qn;
+        }
+        if(texto[0]=='Q')
+        {
+            tablero[y][x] = qb;
+        }
+        if(texto[0]=='k')
+        {
+            tablero[y][x] = kn;
+            xNegro = x;
+            yNegro = y;
+        }
+        if(texto[0]=='K')
+        {
+            tablero[y][x] = kb;
+            xBlanco = x;
+            yBlanco = y;
+        }
+        if(texto[0]=='p')
+        {
+            tablero[y][x] = pn;
+        }
+        if(texto[0]=='P')
+        {
+            tablero[y][x] = pb;
+        }
+        if(texto[0]=='-')
+        {
+            contador=1;
+        }
+    }
+
+    }
+    jugadas.pop_back();
+    abrir.close();
+}
+
+void Tablero::guardarJugada(string mov)
+{
+    string guardar;
+    int xIni;
+    int yIni;
+
+    if(mov[0] == 'a' || mov[0] == 'A')
+        xIni = 0;
+    else if(mov[0] == 'b' || mov[0] == 'B')
+        xIni = 1;
+    else if(mov[0] == 'c' || mov[0] == 'C')
+        xIni = 2;
+    else if(mov[0] == 'd' || mov[0] == 'D')
+        xIni = 3;
+    else if(mov[0] == 'e' || mov[0] == 'E')
+        xIni = 4;
+    else if(mov[0] == 'f' || mov[0] == 'F')
+        xIni = 5;
+    else if(mov[0] == 'g' || mov[0] == 'G')
+        xIni = 6;
+    else
+        xIni = 7;
+
+    yIni = (int)mov[1] - 48;
+
+    guardar = tablero[yIni][xIni].getNombre() + " a " + mov[5] + mov[6];
+    jugadas.push_back(guardar);
+}
+
+void Tablero::mostrarJugadas()
+{
+    vector<string>::iterator it;
+    for(it = jugadas.begin(); it != jugadas.end(); it++)
+    {
+        cout << (*it) << endl;
+    }
+}
+
+void Tablero::borrarUltimaJugada()
+{
+    vector<string>::iterator it;
+    it = jugadas.end();
+    jugadas.erase(it);
+}
+
+void Tablero::menuPpal()
+{
+    int opcion = 0;
+
+    do
+    {
+    cout << "*======================================================*"<<endl;
+    cout << "*                     Bienvenid@ a                     *"<<endl;
+    cout << "*              Ajedrez por: Manuel Diaz                *"<<endl;
+    cout << "*======================================================*"<<endl;
+    cout << "*                                                      *"<<endl;
+    cout << "*                   (1)Nuevo juego                     *"<<endl;
+    cout << "*                   (2)Continuar Partida               *"<<endl;
+    cout << "*                   (3)Guardar Partida                 *"<<endl;
+    cout << "*                   (4)Cargar Partida                  *"<<endl;
+    cout << "*                   (0)Salir                           *"<<endl;
+    cout << "*                                                      *"<<endl;
+    cout << "*======================================================*"<<endl<<endl;
+    cout << "Su opcion: " << endl;
+        cin >> opcion;
+        switch (opcion) {
+            case 1:
+            {
+                nuevaPartida(); //Investigar como creo el nuevo objeto y trabajo desde el
+                cin.ignore();
+                jugar();
+                break;
+            }
+            case 2:
+                cin.ignore();
+                jugar();
+                break;
+            case 3:
+                guardarPartida();
+                break;
+            case 4:
+                cargarPartida();
+                break;
+            default:
+                if (opcion != 0)
+                    cout << endl << "=== Opcion no valida ===" << endl;
+        }
+
+    } while (opcion != 0);
 }

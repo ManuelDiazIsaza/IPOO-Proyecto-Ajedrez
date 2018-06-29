@@ -17,6 +17,7 @@
 #include <string>
 #include <iostream>
 #include "Fichas.h"
+#include <vector>
 
 using namespace std;
 
@@ -28,6 +29,8 @@ private:
     int yBlanco; // posicion y del rey blanco
     int xNegro; // posicion x del rey negro
     int yNegro; // posicion y del rey negro.
+    int jugadorActual=1;
+    vector<string> jugadas; // Vector para guardar las jugadas de la partida.
 
 public:
     Tablero();
@@ -66,6 +69,18 @@ public:
     bool reyPuedeMover(int jugadorA); // verifico si el rey se puede mover seguro a una posicion.
 
     void jugar(); // Metodo que maneja la logistica del juego.
+
+    //guardar y cargar partida
+    void guardarPartida();
+    void cargarPartida();
+
+    //guardar y mostrar jugadas de la partida
+    void guardarJugada(string jugada);
+    void mostrarJugadas();
+    void borrarUltimaJugada();
+
+    void menuPpal();
+    void nuevaPartida();
 };
 
 #endif
